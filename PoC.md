@@ -13,8 +13,8 @@ flowchart TD
     A([Start]) --> B[Input Data]
     B --> C[Convert to Hex String]
     C --> D["Map Hex to Colors\n(Intermediate Noise Image)"]
-    D --> E[Select Target Image]
-    E --> F["Rearrange Pixels to\nMimic Target Image"]
+    D --> E["Select Target Shape\n(Circle/Square/Triangle)"]
+    E --> F["Rearrange Pixels to\nMimic Gradient Shape"]
     F --> G["Generate Master Key\n(Map + Metadata)"]
     F --> H([Output Final Image])
 ```
@@ -41,9 +41,14 @@ flowchart TD
 *   **Result**: An "Intermediate Noise Image" is created, containing the raw encrypted data as colored pixels.
 
 ### 3.3 Image Mimicry & Pixel Shuffling
-*   **Target Selection**: The user selects a target image (e.g., a landscape, a logo).
-*   **Rearrangement Algorithm**: The system analyzes the colors of the "Intermediate Noise Image" and rearranges the pixels to match the visual structure of the "Target Image" as closely as possible.
-*   **Output**: A final BMP image that looks like a noisy version of the target image.
+*   **Target Generation**: Instead of a complex user-selected image, the system generates a target pattern based on a rotation.
+*   **Pattern Rotation**: The target cycles between three shapes:
+    1.  **Gradient Circle**
+    2.  **Gradient Square**
+    3.  **Gradient Triangle**
+*   **Gradient Style**: All shapes feature a radial gradient, starting with light pixels in the center and fading to dark pixels at the exterior.
+*   **Rearrangement Algorithm**: The system rearranges the pixels of the "Intermediate Noise Image" to form the selected shape from the rotation.
+*   **Output**: A final BMP image that visually represents one of these geometric shapes.
 
 ### 3.4 The Master Key
 A separate file (e.g., `.key` or `.json`) is generated containing all information required for decryption.
@@ -61,9 +66,9 @@ A separate file (e.g., `.key` or `.json`) is generated containing all informatio
 **Input**: `ABC`
 1.  **Hex Conversion**: `41 42 43`
 2.  **Intermediate Pixels**: `[Yellow, Red, Yellow, Green, Yellow, Blue]`
-3.  **Target Image**: A simple flag (Blue, Yellow, Red).
-4.  **Shuffling**: The algorithm moves the pixels to match the flag's pattern.
-    *   *Final Image*: Looks somewhat like the flag.
+3.  **Target Pattern**: The system selects the next shape in rotation (e.g., Gradient Circle).
+4.  **Shuffling**: The algorithm moves the pixels to form a circular gradient (light center, dark edges).
+    *   *Final Image*: Looks like a pixelated, glowing circle.
 5.  **Master Key Generated**: Records that Pixel 1 moved to Pos 5, Pixel 2 to Pos 3, etc., and that the original file was `text.txt`.
 
 ## 5. Security Considerations & Limitations
